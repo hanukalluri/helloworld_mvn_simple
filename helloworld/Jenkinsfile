@@ -1,0 +1,50 @@
+pipeline {
+	agent any
+	
+	stages {
+	
+		stage ('Compile Stage'){
+		
+			steps{
+			
+			withMaven(maven : 'maven-3.2.1'){
+			
+				sh 'mvn -f helloworld/pom.xml clean compile'
+			}
+			
+			}
+		}
+		stage ('Testing Stage'){
+			
+			steps{
+				withMaven(maven : 'maven-3.2.1'){
+					sh 'mvn -f helloworld/pom.xml test'
+				
+				}
+			}
+		
+		}
+		
+		stage ('Install stage'){
+			
+			steps{
+				withMaven(maven : 'maven-3.2.1'){
+					sh 'mvn -f helloworld/pom.xml install'
+				
+				}
+			}
+		
+		}
+		
+		stage ('Deployment Stage'){
+		
+			steps{
+				withMaven(maven : 'maven-3.2.1'){
+				
+					sh 'mvn -f helloworld/pom.xml tomcat7:redeploy'
+				}
+			}
+		}
+	}
+
+}
